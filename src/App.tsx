@@ -1,10 +1,21 @@
-import {} from 'react';
+import { BrowserRouter, Router } from 'react-router-dom';
+import RouterView from './components/RouterView';
+import BottomNavigation from './components/BottomNavigation';
 
-function App() {
+const App: React.FC<{}> = () => {
   return (
-    <div className="App">
-      你好, 音乐中心
-    </div>
+    <BrowserRouter>
+      <div
+        className="app-main"
+      >
+        <RouterView />
+      </div>
+      <div
+        className='app-operate'
+      >
+        <BottomNavigation />
+      </div>
+    </BrowserRouter>
   )
 }
 
