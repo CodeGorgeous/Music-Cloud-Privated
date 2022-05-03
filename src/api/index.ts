@@ -5,6 +5,7 @@ import {
     IVerificationCodeResponse,
     IVerify,
     IUserDetailResponse,
+    IUserWatchResponse
 } from '../types/api';
 
 /**
@@ -71,8 +72,22 @@ export async function getUserLoginStatus() {
  * @returns 
  */
 export async function getUserWatchList(uid: number) {
-    return await instance<any>({
+    return await instance<IUserWatchResponse>({
         url: '/user/follows',
+        params: {
+            uid
+        }
+    });
+}
+
+/**
+ * 获取用户喜欢的歌曲列表, 前提为用户已登陆
+ * @param uid 
+ * @returns 
+ */
+export async function getLikeMusicList(uid: number) {
+    return await instance<any>({
+        url: '/likelist',
         params: {
             uid
         }
