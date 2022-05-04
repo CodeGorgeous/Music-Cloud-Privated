@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, AlertColor } from '@mui/material';
 import { AllInclusive, AccountCircle, Key } from '@mui/icons-material';
 import style from './index.module.css';
+import Notification from '@/components/Notification';
+import { obtainVerificationCode } from '@/api';
+import store from '@/store';
 
 interface IProps {}
 
@@ -14,29 +17,70 @@ const LoginComponent: React.FC<IProps> = (props) => {
     const [verificationCodeState, setVerificationCodeState] = useState<boolean>(false);
     const timing = 60;
     const [time, setTime] = useState<number>(timing);
+    const [notification, setNotification] = useState<{
+        open: boolean
+        type: AlertColor
+        text: string
+    }>({
+        open: false,
+        type: 'info',
+        text: ''
+    });
 
-    const handleSendVerificationCode = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-        console.log('发送验证码');
-        // 需要向手机发送一个二维码
-        setVerificationCodeState(true);
-        let timer = setTimeout(() => {
-            if (time === 0) {
-                clearInterval(timer);
-                setVerificationCodeState(false);
-                setTime(timing);
+    const handleSendVerificationCode = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
+        if (!/^(?:(?:\+|00)86)?1\d{10}$/.test(userPhone)) {
+            setNotification({
+                open: true,
+                type: 'error',
+                text: '手机号码不正确'
+            });
+            return;
+        };
+        await obtainVerificationCode({
+            phone: userPhone
+        }).then(resp => {
+            if (resp.code === 200) {
+                setNotification({
+                    open: true,
+                    type: 'success',
+                    text: '验证码已成功发出, 注意查收'
+                });
+                // 发送开关进入倒计时
+            } else {
+                setNotification({
+                    open: true,
+                    type: 'error',
+                    text: '验证码发送失败, 请重新尝试'
+                });
             }
-            setTime(time - 1);
-        }, 1000);
+        });
+        // setVerificationCodeState(true);
+        // let timer = setTimeout(() => {
+        //     if (time === 0) {
+        //         clearInterval(timer);
+        //         setVerificationCodeState(false);
+        //         setTime(timing);
+        //     }
+        //     setTime(time - 1);
+        // }, 1000);
     }
 
     const handleUserRegister = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
         console.log('注册');
     }
 
-    const handleUserLogin = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+    const handleUserLogin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
         if (loginState) return; // 如果现在处于登录状态则先暂时忽略点击, 直到登录成功
+        // TODO: 先验证手机号, 最后让用户登录
+        if (!/^(?:(?:\+|00)86)?1\d{10}$/.test(userPhone)) {
+            setNotification({
+                open: true,
+                type: 'error',
+                text: '手机号码不正确'
+            });
+            return;
+        };
         setLoginState(true);
-        console.log('登录', userPhone, userVerificationCode);
     }
 
     return (
@@ -86,6 +130,16 @@ const LoginComponent: React.FC<IProps> = (props) => {
                     </LoadingButton>
                 </div>
             </div>
+            <Notification
+                open={notification.open}
+                type={notification.type}
+                text={notification.text}
+                onClose={() => setNotification({
+                    open: false,
+                    type: 'info',
+                    text: ''
+                })}
+            />
         </div>
     )
 }
