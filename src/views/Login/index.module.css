@@ -1,0 +1,46 @@
+.login-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-top: 7rem;
+}
+
+.login-icon {
+    width: 10rem!important;
+    height: 10rem!important;
+    color: var(--color-text);
+}
+
+.login-operate {
+    width: 100%;
+    color: var(--color-text);
+    text-align: center;
+}
+
+.login-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-top: 1rem;
+}
+
+.login-row-icon {
+    width: 2rem!important;
+    height: 2rem!important;
+    margin-right: 0.5rem;
+}
+
+.login-row-input {
+    width: 8rem;
+    display: flex;
+    margin-right: 0.3rem!important;
+}
+
+.login-btn {
+    margin-top: 2rem;
+}
+
+.login-btn button:first-child {
+    margin-right: 2rem;
+}

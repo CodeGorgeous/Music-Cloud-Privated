@@ -1,22 +1,9 @@
-import { BrowserRouter, Router } from 'react-router-dom';
-import RouterView from './components/RouterView';
-import BottomNavigation from './components/BottomNavigation';
+import { useRoutes } from 'react-router-dom';
+import { router } from '@/router/index';
 
 const App: React.FC<{}> = () => {
-  return (
-    <BrowserRouter>
-      <div
-        className="app-main"
-      >
-        <RouterView />
-      </div>
-      <div
-        className='app-operate'
-      >
-        <BottomNavigation />
-      </div>
-    </BrowserRouter>
-  )
+  const Component = useRoutes(router);
+  return Component;
 }
 
 export default App;

@@ -1,7 +1,7 @@
 export interface IRouter {
     path?: string
     name?: string
-    component?: any
+    element?: any
     children?: IRouter[]
     redirect?: string
 }

@@ -14,17 +14,8 @@ body {
 #root {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
 }
 
-.app-main {
-    width: 100%;
-    flex: 1;
-}
-
-.app-operate {
-    width: 100%;
-    box-shadow: 0 0 2rem 0.5rem rgba(25, 118, 210, 0.1);
+:root {
+    --color-text: #1976d2;
 }

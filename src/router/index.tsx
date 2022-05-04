@@ -1,25 +1,24 @@
-import { IRouter } from '../types/router';
-import Home from '../views/Home';
-import User from '../views/User';
-import Care from '../views/Care';
-import NotFound from '../views/NoResources';
+import { IRouter } from '@/types/router';
+import Home from '@/views/Home';
+import User from '@/views/User';
+import Care from '@/views/Care';
+import Login from '@/views/Login'
+import NotFound from '@/views/NoResources';
 
-const router: IRouter[] = [{
+export const router: IRouter[] = [{
+    path: '/login',
+    element: <Login />
+}, {
     path: '/',
-    name: 'Home',
-    component: Home
+    element: <Home />,
+    children: [{
+        path: '/care',
+        element: <Care />
+    }, {
+        path: '/user',
+        element: <User />
+    }]
 }, {
-    path: '/care',
-    name: 'Care',
-    component: Care
-}, {
-    path: '/user',
-    name: 'User',
-    component: User
-}, {
-    path: '/notfound',
-    name: 'NotFound',
-    component: NotFound
+    path: '*',
+    element: <NotFound />
 }];
-
-export default router;
