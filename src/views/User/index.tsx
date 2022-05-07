@@ -1,6 +1,7 @@
 import style from './index.module.css';
 import UserInfo from './components/UserInfo';
-import UserLike from './components/UserLike';
+import JumpShowPaper from './components/JumpShowPaper'; 
+import { Favorite } from '@mui/icons-material';
 
 interface IProps {}
 
@@ -11,7 +12,18 @@ const Component: React.FC<IProps> = (props) => {
             className={style['user-container']}
         >
             <UserInfo />
-            <UserLike />
+            <JumpShowPaper
+                icon={<Favorite sx={{color: 'red'}}/>}
+                text="我喜欢的歌曲"
+                ifShowRightIcon={true}
+                jumpPath="/likeMusic"
+            />
+            <JumpShowPaper
+                icon={<Favorite sx={{color: 'red'}}/>}
+                text="我关注的歌手"
+                ifShowRightIcon={false}
+                jumpPath="/likeMusic"
+            />
         </div>
     )
 }

@@ -1,0 +1,27 @@
+.jump-show-paper-container {
+    padding: 0.5rem 0.75rem;
+    margin: 1rem 0;
+}
+
+.paper-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.paper-content-left {
+    display: flex;
+    align-items: center;
+}
+
+.paper-content-left-icon {
+    margin-right: 0.25rem;
+    display: flex;
+    align-items: center;
+}
+
+.paper-content-right-icon {
+    display: flex;
+    align-items: center;
+    color: var(--color-text);
+}

@@ -5,9 +5,17 @@ import { AllInclusive, AccountCircle, Key } from '@mui/icons-material';
 import style from './index.module.css';
 import Notification from '@/components/Notification';
 import { obtainVerificationCode } from '@/api';
-import store from '@/store';
+import { connect } from 'react-redux';
+import { _SET_USER_INFO, _CLEAR_USER_INFO } from '@/store/action';
+import { IUserDetailResponse } from '@/types/api';
+import { login, getUserDetails } from '@/api';
+import cookie from 'cookie';
+import { useNavigate } from 'react-router-dom';
 
-interface IProps {}
+interface IProps {
+    onSignIn: (payload: IUserDetailResponse) => void
+    onSignOut: () => void
+}
 
 const LoginComponent: React.FC<IProps> = (props) => {
 
@@ -68,10 +76,10 @@ const LoginComponent: React.FC<IProps> = (props) => {
     const handleUserRegister = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
         console.log('注册');
     }
-
+    
+    const navigate = useNavigate();
     const handleUserLogin = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): Promise<void> => {
         if (loginState) return; // 如果现在处于登录状态则先暂时忽略点击, 直到登录成功
-        // TODO: 先验证手机号, 最后让用户登录
         if (!/^(?:(?:\+|00)86)?1\d{10}$/.test(userPhone)) {
             setNotification({
                 open: true,
@@ -80,7 +88,33 @@ const LoginComponent: React.FC<IProps> = (props) => {
             });
             return;
         };
+        if (!userVerificationCode) {
+            return
+        }
         setLoginState(true);
+        const payloadTemp = await login({
+            phone: userPhone,
+            password: '',
+            captcha: userVerificationCode
+        });
+        let temp = cookie.parse(payloadTemp.cookie);
+        temp['user_id'] = payloadTemp.account.id.toString();
+        temp['user_lock'] = "true";
+        for (const key in temp) {
+            const result = cookie.serialize(key, temp[key], {
+                expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+            });
+            document.cookie = result;
+        }
+        const payload = await getUserDetails(payloadTemp.account.id);
+        props.onSignIn && props.onSignIn(payload);
+        setLoginState(false);
+        setNotification({
+            open: true,
+            type: 'success',
+            text: '登录成功'
+        });
+        navigate('/');
     }
 
     return (
@@ -144,4 +178,20 @@ const LoginComponent: React.FC<IProps> = (props) => {
     )
 }
 
-export default LoginComponent;
+export default connect((store: any) => {
+    return {}
+  }, (dispatch) => {
+    return {
+        onSignIn(payload: IUserDetailResponse): void {
+            dispatch({
+                type: _SET_USER_INFO,
+                payload
+            })
+        },
+        onSignOut(): void {
+            dispatch({
+                type: _CLEAR_USER_INFO
+            })
+        }
+    }
+  })(LoginComponent);

@@ -5,14 +5,17 @@ import {
     IVerificationCodeResponse,
     IVerify,
     IUserDetailResponse,
-    IUserWatchResponse
-} from '../types/api';
+    IUserWatchResponse,
+    IUserLoginData,
+    IUserLikeMusicListResponse,
+    IUserLikeMusicDetailListResponse
+} from '@/types/api';
 
 /**
  * 手机登录
  */
 export async function login(loginMessage: ILoginData) {
-    return await instance({
+    return await instance<IUserLoginData>({
         url: '/login/cellphone',
         params: loginMessage
     })
@@ -86,10 +89,24 @@ export async function getUserWatchList(uid: number) {
  * @returns 
  */
 export async function getLikeMusicList(uid: number) {
-    return await instance<any>({
+    return await instance<IUserLikeMusicListResponse>({
         url: '/likelist',
         params: {
             uid
+        }
+    });
+}
+
+/**
+ * 获取歌曲详情
+ * @param ids 多个歌曲可以使用,进行链接
+ * @returns 
+ */
+export async function getMusicDetailList(ids: string) {
+    return await instance<IUserLikeMusicDetailListResponse>({
+        url: '/song/detail',
+        params: {
+            ids
         }
     });
 }

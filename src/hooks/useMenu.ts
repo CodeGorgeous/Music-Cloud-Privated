@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { IMenu } from '../types';
 import { Public, Castle, Boy } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function useMenu() {
     const navigate = useNavigate();
@@ -28,10 +28,11 @@ export default function useMenu() {
         navigate(menuValue.route);
     };
 
+    const location = useLocation();
     useEffect(() => {
         let index: number = 0;
         menuList.forEach((item, i) => {
-            if (item.route === window.location.pathname) index = i;
+            if (location.pathname == item.route) index = i;
         });
         setMenu(menuList[index]);
     }, [])

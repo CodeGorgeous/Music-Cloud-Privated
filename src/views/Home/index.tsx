@@ -1,7 +1,6 @@
 import style from './index.module.css';
 import BottomNavigation from '@/components/BottomNavigation';
 import { Outlet } from 'react-router-dom'
-import { router } from '@/router/index';
 
 interface IProps {}
 const HomeComponent: React.FC<IProps> = (props) => {

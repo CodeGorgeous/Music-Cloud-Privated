@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 const instance = axios.create({
-    baseURL: 'https://netease-cloud-music-api-opal-eight.vercel.app/'
+    baseURL: 'https://netease-cloud-music-api-opal-eight.vercel.app/',
+    withCredentials: true
 });
 
 const request = async <T>(config: AxiosRequestConfig): Promise<T> => {
